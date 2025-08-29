@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delícias da Casa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Bebas+Neue&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcebeb; /* Fundo rosa claro */
+            color: #4a4a4a;
+        }
+
+        .logo-text {
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 2px;
+            color: #ff6b6b; /* Rosa vibrante */
+        }
+
+        .carousel-item {
+            display: none;
+        }
+        .carousel-item.active {
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 1.5px;
+            position: relative;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -0.5rem;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #ff6b6b;
+            border-radius: 2px;
+        }
+
+        .menu-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .selected-option {
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+        }
+
+        .cart-item-controls button {
+            transition: all 0.2s;
+            background: #f0f0f0;
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-item-controls button:hover {
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+<body class="bg-rose-50 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <header class="bg-white shadow-lg py-4 fixed w-full top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center px-4 md:px-6">
+            <a href="#" class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-rose-500">
+                    <path d="M7.5 7.5a3 3 0 100 6 3 3 0 000-6z" />
+                    <path fill-rule="evenodd" d="M12.53 16.205a.75.75 0 01-.078 1.036l-3.75 3.75a.75.75 0 01-1.06 0L1.5 17.24a.75.75 0 01-.068-1.06l.192-.259a5.95 5.95 0 013.142-2.385l.135-.043a5.57 5.57 0 01.378-.14l.133-.038a4.537 4.537 0 01.196-.054l.135-.033c.123-.028.24-.047.368-.063l.128-.027a4.671 4.671 0 011.08-.15c.373-.035.748-.046 1.121-.035l.128.005c.174.007.348.016.519.03.178.014.352.029.522.05L12.53 16.205zm9.511-2.903a.75.75 0 010 1.06l-3.75 3.75a.75.75 0 01-1.06 0l-3.75-3.75a.75.75 0 111.06-1.06l3.22 3.22 3.22-3.22a.75.75 0 011.06 0z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M12.53 16.205a.75.75 0 01-.078 1.036l-3.75 3.75a.75.75 0 01-1.06 0L1.5 17.24a.75.75 0 01-.068-1.06l.192-.259a5.95 5.95 0 013.142-2.385l.135-.043a5.57 5.57 0 01.378-.14l.133-.038a4.537 4.537 0 01.196-.054l.135-.033c.123-.028.24-.047.368-.063l.128-.027a4.671 4.671 0 011.08-.15c.373-.035.748-.046 1.121-.035l.128.005c.174.007.348.016.519.03.178.014.352.029.522.05L12.53 16.205zm9.511-2.903a.75.75 0 010 1.06l-3.75 3.75a.75.75 0 01-1.06 0l-3.75-3.75a.75.75 0 111.06-1.06l3.22 3.22 3.22-3.22a.75.75 0 011.06 0z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-3xl font-bold logo-text">Delícias da Casa</span>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="#lanches" class="text-gray-600 hover:text-rose-500 font-semibold transition-colors duration-300">Lanches</a>
+                <a href="#sorvetes" class="text-gray-600 hover:text-rose-500 font-semibold transition-colors duration-300">Sorvetes</a>
+                <a href="#promocoes" class="text-gray-600 hover:text-rose-500 font-semibold transition-colors duration-300">Promoções</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto mt-24 px-4 md:px-6 flex-grow">
+        <!-- Banner/Carrossel -->
+        <section id="promocoes" class="my-10">
+            <h2 class="section-title text-4xl font-bold text-gray-800 mb-8">Promoções da Semana</h2>
+            <div id="carousel" class="carousel-container relative w-full max-w-4xl mx-auto">
+                <div class="carousel-item active">
+                    <img src="https://placehold.co/1200x400/e5e5e5/333333?text=Promoção+Especial+1" alt="Promoção 1" class="w-full rounded-xl">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://placehold.co/1200x400/ffe4e6/333333?text=Promoção+Especial+2" alt="Promoção 2" class="w-full rounded-xl">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://placehold.co/1200x400/d9d0e2/333333?text=Promoção+Especial+3" alt="Promoção 3" class="w-full rounded-xl">
+                </div>
+                <div class="carousel-nav">
+                    <button class="prev" onclick="prevSlide()">&#10094;</button>
+                    <button class="next" onclick="nextSlide()">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Lanches -->
+        <section id="lanches" class="my-10">
+            <h2 class="section-title text-4xl font-bold text-gray-800 mb-8">Monte Seu Lanche</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Pães -->
+                <div class="bg-white p-6 rounded-2xl menu-card">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-700">Pão</h3>
+                    <div class="space-y-4">
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="bread" value="Gergelim" class="form-radio h-5 w-5 text-rose-500" data-price="5.00">
+                            <span>Gergelim</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="bread" value="3 Queijos" class="form-radio h-5 w-5 text-rose-500" data-price="6.00">
+                            <span>3 Queijos</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="bread" value="Italiano" class="form-radio h-5 w-5 text-rose-500" data-price="5.50">
+                            <span>Italiano</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Proteínas -->
+                <div class="bg-white p-6 rounded-2xl menu-card">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-700">Proteína</h3>
+                    <p class="text-sm text-gray-500 mb-4">Escolha uma opção:</p>
+                    <div class="space-y-4">
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="protein" value="Bovino" class="form-radio h-5 w-5 text-rose-500" data-price="15.00">
+                            <span>Bovino</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="protein" value="Suíno" class="form-radio h-5 w-5 text-rose-500" data-price="14.00">
+                            <span>Suíno</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="protein" value="Soja (Vegetariano)" class="form-radio h-5 w-5 text-rose-500" data-price="12.00">
+                            <span>Soja (Vegetariano)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="protein" value="Tofu (Vegetariano)" class="form-radio h-5 w-5 text-rose-500" data-price="11.00">
+                            <span>Tofu (Vegetariano)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Saladas -->
+                <div class="bg-white p-6 rounded-2xl menu-card">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-700">Salada</h3>
+                    <p class="text-sm text-gray-500 mb-4">Escolha quantas quiser:</p>
+                    <div class="space-y-4">
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="checkbox" name="salad" value="Alface" class="form-checkbox h-5 w-5 text-rose-500 rounded">
+                            <span>Alface</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="checkbox" name="salad" value="Tomate" class="form-checkbox h-5 w-5 text-rose-500 rounded">
+                            <span>Tomate</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="checkbox" name="salad" value="Cebola" class="form-checkbox h-5 w-5 text-rose-500 rounded">
+                            <span>Cebola</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="checkbox" name="salad" value="Picles" class="form-checkbox h-5 w-5 text-rose-500 rounded">
+                            <span>Picles</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Molhos -->
+                <div class="bg-white p-6 rounded-2xl menu-card">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-700">Molho</h3>
+                    <p class="text-sm text-gray-500 mb-4">Escolha um:</p>
+                    <div class="space-y-4">
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="sauce" value="Alho" class="form-radio h-5 w-5 text-rose-500" data-price="2.00">
+                            <span>Alho</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="sauce" value="Verde" class="form-radio h-5 w-5 text-rose-500" data-price="2.50">
+                            <span>Verde</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="sauce" value="Agridoce" class="form-radio h-5 w-5 text-rose-500" data-price="2.50">
+                            <span>Agridoce</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="sauce" value="Barbecue" class="form-radio h-5 w-5 text-rose-500" data-price="2.00">
+                            <span>Barbecue</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center mt-8 space-x-4">
+                <button id="add-sandwich-btn" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors duration-300">Adicionar Lanche</button>
+                <button id="clear-sandwich-btn" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors duration-300">Limpar</button>
+            </div>
+        </section>
+
+        <!-- Seção de Sorvetes -->
+        <section id="sorvetes" class="my-10">
+            <h2 class="section-title text-4xl font-bold text-gray-800 mb-8">Monte Seu Sorvete</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Sabores -->
+                <div class="bg-white p-6 rounded-2xl menu-card">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-700">Sabor</h3>
+                    <div class="space-y-4">
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="icecream-flavor" value="Chocolate" class="form-radio h-5 w-5 text-rose-500" data-price="8.00">
+                            <span>Chocolate</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="icecream-flavor" value="Morango" class="form-radio h-5 w-5 text-rose-500" data-price="7.50">
+                            <span>Morango</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="radio" name="icecream-flavor" value="Creme" class="form-radio h-5 w-5 text-rose-500" data-price="7.00">
+                            <span>Creme</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Coberturas -->
+                <div class="bg-white p-6 rounded-2xl menu-card">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-700">Coberturas</h3>
+                    <p class="text-sm text-gray-500 mb-4">Escolha quantas quiser:</p>
+                    <div class="space-y-4">
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="checkbox" name="icecream-topping" value="Granulado" class="form-checkbox h-5 w-5 text-rose-500 rounded" data-price="1.50">
+                            <span>Granulado</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="checkbox" name="icecream-topping" value="Gotas de Chocolate" class="form-checkbox h-5 w-5 text-rose-500 rounded" data-price="2.00">
+                            <span>Gotas de Chocolate</span>
+                        </label>
+                        <label class="flex items-center space-x-3 text-lg cursor-pointer">
+                            <input type="checkbox" name="icecream-topping" value="Leite Condensado" class="form-checkbox h-5 w-5 text-rose-500 rounded" data-price="2.50">
+                            <span>Leite Condensado</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center mt-8 space-x-4">
+                <button id="add-icecream-btn" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors duration-300">Adicionar Sorvete</button>
+                <button id="clear-icecream-btn" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors duration-300">Limpar</button>
+            </div>
+        </section>
+
+        <!-- Carrinho e Total -->
+        <section class="my-10 bg-white p-8 rounded-2xl shadow-lg w-full lg:max-w-xl mx-auto">
+            <h2 class="section-title text-3xl font-bold text-gray-800 mb-4">Seu Pedido</h2>
+            <div id="order-details" class="space-y-4 mb-4">
+                <!-- Detalhes do pedido serão inseridos aqui pelo JavaScript -->
+            </div>
+            <div class="border-t pt-4 mt-4 flex justify-between items-center text-2xl font-bold">
+                <span>Total:</span>
+                <span id="total-price">R$ 0,00</span>
+            </div>
+            
+            <div id="special-offer" class="text-center mt-4 text-green-600 font-semibold hidden">
+                Parabéns! Você ganhou um brinde surpresa e um cupom de 10% de desconto!
+            </div>
+        </section>
+
+        <!-- Formulário de Pagamento -->
+        <section class="my-10 bg-white p-8 rounded-2xl shadow-lg w-full lg:max-w-xl mx-auto">
+            <h2 class="section-title text-3xl font-bold text-gray-800 mb-4">Finalizar Pedido</h2>
+            <form id="checkout-form" class="space-y-6">
+                <!-- Opções de Entrega -->
+                <div>
+                    <h4 class="font-semibold text-lg mb-2">Forma de Retirada</h4>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="delivery-option" value="retirar" class="form-radio h-5 w-5 text-rose-500" checked>
+                            <span>Retirar na Loja</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="delivery-option" value="entrega" class="form-radio h-5 w-5 text-rose-500">
+                            <span>Entrega</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Campo de Endereço (somente para Entrega) -->
+                <div id="address-field" class="hidden">
+                    <label for="address" class="block font-semibold mb-1">Endereço de Entrega</label>
+                    <input type="text" id="address" name="address" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Rua, Número, Bairro">
+                </div>
+                
+                <!-- Informações de Pagamento (exemplo) -->
+                <div>
+                    <h4 class="font-semibold text-lg mb-2">Informações de Pagamento</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="card-name" class="block text-sm font-medium">Nome no Cartão</label>
+                            <input type="text" id="card-name" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-rose-500 focus:border-rose-500">
+                        </div>
+                        <div>
+                            <label for="card-number" class="block text-sm font-medium">Número do Cartão</label>
+                            <input type="text" id="card-number" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-rose-500 focus:border-rose-500">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors duration-300">Finalizar Pedido</button>
+            </form>
+        </section>
+
+        <!-- Mensagem de feedback (substitui alert) -->
+        <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4 z-50">
+            <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm text-center">
+                <p id="modal-message" class="text-lg mb-4"></p>
+                <button onclick="closeModal()" class="bg-rose-500 text-white font-bold py-2 px-6 rounded-full hover:bg-rose-600 transition-colors duration-300">OK</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Delícias da Casa. Todos os direitos reservados.</p>
+            <p class="text-sm mt-2">Feito com muito carinho e sabor.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Lógica do Carrossel
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        
+        function showSlide(index) {
+            slides.forEach((slide) => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            slideIndex = (slideIndex + 1) % slides.length;
+            showSlide(slideIndex);
+        }
+
+        function prevSlide() {
+            slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+            showSlide(slideIndex);
+        }
+
+        showSlide(slideIndex);
+        setInterval(nextSlide, 5000);
+
+        // Lógica do Carrinho de Compras
+        let order = {};
+        const orderDetailsEl = document.getElementById('order-details');
+        const totalPriceEl = document.getElementById('total-price');
+        const specialOfferEl = document.getElementById('special-offer');
+
+        // Função para atualizar o carrinho e o total
+        function updateOrderDisplay() {
+            orderDetailsEl.innerHTML = '';
+            let total = 0;
+
+            for (const itemId in order) {
+                const item = order[itemId];
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('flex', 'justify-between', 'items-center', 'text-gray-700');
+                itemElement.innerHTML = `
+                    <span class="font-semibold">${item.name}</span>
+                    <div class="flex items-center space-x-2 cart-item-controls">
+                        <button onclick="updateQuantity('${itemId}', -1)" class="text-lg text-gray-600"><i class="fas fa-minus"></i></button>
+                        <span class="text-xl font-bold">${item.quantity}</span>
+                        <button onclick="updateQuantity('${itemId}', 1)" class="text-lg text-gray-600"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <span>R$ ${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                orderDetailsEl.appendChild(itemElement);
+                total += item.price * item.quantity;
+            }
+
+            totalPriceEl.textContent = `R$ ${total.toFixed(2)}`;
+            
+            if (total > 100) {
+                specialOfferEl.classList.remove('hidden');
+            } else {
+                specialOfferEl.classList.add('hidden');
+            }
+        }
+
+        // Função para atualizar a quantidade de um item no carrinho
+        function updateQuantity(itemId, change) {
+            if (order[itemId]) {
+                order[itemId].quantity += change;
+                if (order[itemId].quantity <= 0) {
+                    delete order[itemId];
+                }
+            }
+            updateOrderDisplay();
+        }
+
+        // Lógica para o botão "Adicionar Lanche"
+        document.getElementById('add-sandwich-btn').addEventListener('click', () => {
+            const bread = document.querySelector('input[name="bread"]:checked');
+            const protein = document.querySelector('input[name="protein"]:checked');
+            const sauce = document.querySelector('input[name="sauce"]:checked');
+            const salads = Array.from(document.querySelectorAll('input[name="salad"]:checked'));
+
+            if (!bread || !protein || !sauce) {
+                showMessage("Por favor, selecione um pão, uma proteína e um molho para montar seu lanche.");
+                return;
+            }
+
+            const sandwichPrice = parseFloat(bread.dataset.price) + parseFloat(protein.dataset.price) + parseFloat(sauce.dataset.price);
+            const saladNames = salads.length ? `+ ${salads.map(s => s.value).join(', ')}` : '';
+            const saladPrice = salads.length * 1.50;
+            const finalSandwichPrice = sandwichPrice + saladPrice;
+            const sandwichName = `Lanche: ${bread.value}, ${protein.value}, ${sauce.value} ${saladNames}`;
+            const itemId = sandwichName.replace(/\s/g, ''); // Cria um ID único para o item
+
+            if (order[itemId]) {
+                order[itemId].quantity += 1;
+            } else {
+                order[itemId] = { name: sandwichName, price: finalSandwichPrice, quantity: 1 };
+            }
+
+            updateOrderDisplay();
+            showMessage(`Seu lanche foi adicionado ao carrinho!`);
+        });
+
+        // Lógica para o botão "Limpar Lanche"
+        document.getElementById('clear-sandwich-btn').addEventListener('click', () => {
+            document.querySelectorAll('input[name="bread"]').forEach(input => input.checked = false);
+            document.querySelectorAll('input[name="protein"]').forEach(input => input.checked = false);
+            document.querySelectorAll('input[name="sauce"]').forEach(input => input.checked = false);
+            document.querySelectorAll('input[name="salad"]').forEach(input => input.checked = false);
+            document.querySelectorAll('.menu-card').forEach(card => card.classList.remove('selected-option'));
+            showMessage("Opções do lanche limpas. Monte um novo!");
+        });
+
+        // Lógica para o botão "Adicionar Sorvete"
+        document.getElementById('add-icecream-btn').addEventListener('click', () => {
+            const flavor = document.querySelector('input[name="icecream-flavor"]:checked');
+            const toppings = Array.from(document.querySelectorAll('input[name="icecream-topping"]:checked'));
+
+            if (!flavor) {
+                showMessage("Por favor, selecione um sabor de sorvete para continuar.");
+                return;
+            }
+            
+            const icecreamPrice = parseFloat(flavor.dataset.price);
+            const toppingNames = toppings.length ? `+ ${toppings.map(t => t.value).join(', ')}` : '';
+            const toppingsPrice = toppings.reduce((sum, t) => sum + parseFloat(t.dataset.price), 0);
+            const finalIcecreamPrice = icecreamPrice + toppingsPrice;
+            const icecreamName = `Sorvete: ${flavor.value} ${toppingNames}`;
+            const itemId = icecreamName.replace(/\s/g, '');
+
+            if (order[itemId]) {
+                order[itemId].quantity += 1;
+            } else {
+                order[itemId] = { name: icecreamName, price: finalIcecreamPrice, quantity: 1 };
+            }
+
+            updateOrderDisplay();
+            showMessage(`Seu sorvete foi adicionado ao carrinho!`);
+        });
+
+        // Lógica para o botão "Limpar Sorvete"
+        document.getElementById('clear-icecream-btn').addEventListener('click', () => {
+            document.querySelectorAll('input[name="icecream-flavor"]').forEach(input => input.checked = false);
+            document.querySelectorAll('input[name="icecream-topping"]').forEach(input => input.checked = false);
+            document.querySelectorAll('.menu-card').forEach(card => card.classList.remove('selected-option'));
+            showMessage("Opções do sorvete limpas. Comece a montar um novo!");
+        });
+
+        // Lógica para destacar as opções selecionadas
+        document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+            input.addEventListener('change', () => {
+                const parentDiv = input.closest('.menu-card');
+                if (input.type === 'radio') {
+                    document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                        radio.closest('.menu-card').classList.remove('selected-option');
+                    });
+                }
+                if (parentDiv) {
+                    parentDiv.classList.add('selected-option');
+                }
+            });
+        });
+
+        // Lógica do formulário de pagamento e entrega
+        const deliveryOption = document.querySelector('input[name="delivery-option"]');
+        const addressField = document.getElementById('address-field');
+
+        document.querySelectorAll('input[name="delivery-option"]').forEach(input => {
+            input.addEventListener('change', (event) => {
+                if (event.target.value === 'entrega') {
+                    addressField.classList.remove('hidden');
+                } else {
+                    addressField.classList.add('hidden');
+                }
+            });
+        });
+
+        document.getElementById('checkout-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (Object.keys(order).length === 0) {
+                showMessage("Seu carrinho está vazio. Adicione alguns itens antes de finalizar.");
+                return;
+            }
+            
+            const deliveryType = document.querySelector('input[name="delivery-option"]:checked').value;
+            const address = document.getElementById('address').value;
+
+            if (deliveryType === 'entrega' && address.trim() === '') {
+                showMessage("Por favor, insira o endereço para a entrega.");
+                return;
+            }
+            
+            // Simulação de finalização de pedido
+            showMessage("Seu pedido foi recebido com sucesso! Obrigado por comprar conosco.");
+            order = {}; // Limpa o carrinho
+            updateOrderDisplay();
+        });
+
+        // Funções para o modal personalizado
+        function showMessage(message) {
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('modal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html>
